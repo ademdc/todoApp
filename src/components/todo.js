@@ -7,13 +7,13 @@ import Edit from './edit';
 const todo = (props) => {
 
 
-    let tasks = null;
-    //let editing = null;
+    let tasks = (<p>Can not load tasks</p>);
 
-    if (props.tasks) {
+    if (!props.editing) {
         tasks = props.tasks.map((val, index) => {
             return (
-                <div key={index} className="todo">
+                <div key={val.task} className="todo">
+                    <p>Task {index+1}</p>
                     <h3> {val.task} </h3>
                     <Checkbox
                         checked={val.done}
@@ -24,9 +24,7 @@ const todo = (props) => {
                 </div>
             );
         });
-    }
-
-    if (props.editing) {
+    }else {
         tasks = (
             <div className="edit">
                 <p>Editing task {props.editingIndex + 1}</p>
@@ -34,7 +32,7 @@ const todo = (props) => {
                     handleInput={props.handleInput}
                     index={props.editingIndex}
                     input={props.input}
-                    oldText="old text"
+                    oldText={"Task " + (props.editingIndex+1)}
                     save={props.save}
                 />
             </div>);

@@ -5,10 +5,12 @@ const edit = (props) => {
 
     return (
         <Aux>
-            <input type="text" placeholder={props.oldText} onChange={props.handleInput}/>
-            <button className="btn btn-primary" onClick={() => props.save(props.input, props.index)}>
-                Save
-            </button>
+            <form>
+                <input type="text" placeholder={props.oldText} onChange={props.handleInput}/>
+                <button className="btn btn-primary" type="submit" onClick={() => props.save(props.input, props.index)}>
+                    Save
+                </button>
+            </form>
         </Aux>
     );
 };

@@ -1,22 +1,20 @@
 import React, {Component} from 'react';
 import Todo from '../components/todo';
 import Aux from '../hoc/aux';
+import HeaderInput from '../components/header-input';
 
 class Todos extends Component {
     state = {
-        tasks: [
-
-        ],
+        tasks: [],
         input: '',
         noOfTodos: 0,
         editing: false,
-        taskId:0,
-        editingIndex:-1
+        editingIndex:null
     };
 
     addTask = (text) => {
         let task = [...this.state.tasks];
-        task.push({id:this.state.taskId,task:text,done:false});
+        task.push({task:text,done:false});
         this.setState(prevState => ({
             tasks: task,
             input: '',
@@ -37,25 +35,24 @@ class Todos extends Component {
     editTask = (index) => {
         this.setState({
             editing: true,
-            editingIndex:index});
+            editingIndex:index,
+            });
     };
 
-    editFalse = () => {
-        this.setState({editing: false});
-    };
 
     saveTask = (newText, i) => {
         let task = [...this.state.tasks];
-        // if(task.id===i){
-        //     task.task=newText;
-        // }
         task[i].task = newText;
-        this.setState({tasks: task, editing: false});
+        this.setState({tasks: task, editing: false,input:''});
     };
 
     handleInput = (e) => {
         this.setState({input: e.target.value});
     };
+
+    submitForm = (e)=>{
+        e.preventDefault();
+    }
 
     toggleDone = (i) => {
         let task = [...this.state.tasks];
@@ -63,31 +60,29 @@ class Todos extends Component {
         this.setState({tasks: task});
     };
 
-    toggleEdited = (i) => {
-        let edit = [...this.state.edited];
-        edit.edited=!edit.edited;
-        this.setState({edited: edit});
-    };
-
     render() {
         return (
             <Aux>
-                <h1>Todo[{this.state.noOfTodos}]</h1>
-                <input className="form-control" type="text" onChange={this.handleInput}/>
-                <button className="btn btn-success" onClick={() => this.addTask(this.state.input)}>Add task</button>
+                <HeaderInput
+                noOfTodos={this.state.noOfTodos}
+                input={this.state.input}
+                handle={this.handleInput}
+                add={this.addTask}
+                submit={this.submitForm}
+                editing={this.state.editing}
+                />
+
                 <Todo
                     tasks={this.state.tasks}
                     editing={this.state.editing}
                     input={this.state.input}
-                    edited={this.state.edited}
                     editingIndex={this.state.editingIndex}
                     delete={this.deleteTask}
                     edit={this.editTask}
                     save={this.saveTask}
                     done={this.toggleDone}
                     handleInput={this.handleInput}
-                    handleEdited={this.toggleEdited}
-                    editFalse={this.editFalse}/>
+                    />
             </Aux>
         );
     }
