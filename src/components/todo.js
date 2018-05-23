@@ -1,50 +1,43 @@
 import React from 'react';
 import Aux from '../hoc/aux';
 import Checkbox from './checkbox';
+import Edit from './edit';
 
-
-const edit = (oldText,index, props) =>{
-    return(
-    <div>
-        <input type="text" placeholder={oldText} onChange={props.handleInput}/>
-        <button className="btn btn-primary" onClick={() => props.save(props.input, index)}>
-            Save
-        </button>
-    </div>
-    );
-};
 
 const todo = (props) => {
 
 
     let tasks = null;
-    let editing = null;
+    //let editing = null;
 
     if (props.tasks) {
         tasks = props.tasks.map((val, index) => {
             return (
-                    <div key={index} className="todo">
-                        <h3> {val.task} </h3>
-                        <Checkbox
-                            checked={val.done}
-                            index={index}
-                            done={props.done}/>
-
-                        {!props.editing ?
-                            <button className="btn btn-primary" onClick={props.edit}>Edit</button> :
-                            <div>
-                                {edit(val.task, index,props)}
-                                <input type="text" placeholder={val.task} onChange={props.handleInput}/>
-                                <button className="btn btn-primary" onClick={() => props.save(props.input, index)}>
-                                    Save
-                                </button>
-                            </div>}
-
-
-                        <button className="btn btn-danger" onClick={() => props.delete(index)}>Remove</button>
-                    </div>
-                 );
+                <div key={index} className="todo">
+                    <h3> {val.task} </h3>
+                    <Checkbox
+                        checked={val.done}
+                        index={index}
+                        done={props.done}/>
+                    <button className="btn btn-primary" onClick={() => props.edit(index)}>Edit</button>
+                    <button className="btn btn-danger" onClick={() => props.delete(index)}>Remove</button>
+                </div>
+            );
         });
+    }
+
+    if (props.editing) {
+        tasks = (
+            <div className="edit">
+                <p>Editing task {props.editingIndex + 1}</p>
+                <Edit
+                    handleInput={props.handleInput}
+                    index={props.editingIndex}
+                    input={props.input}
+                    oldText="old text"
+                    save={props.save}
+                />
+            </div>);
     }
 
 

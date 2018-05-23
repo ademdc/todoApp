@@ -9,16 +9,19 @@ class Todos extends Component {
         ],
         input: '',
         noOfTodos: 0,
-        editing: false
+        editing: false,
+        taskId:0,
+        editingIndex:-1
     };
 
     addTask = (text) => {
         let task = [...this.state.tasks];
-        task.push({task:text,done:false});
+        task.push({id:this.state.taskId,task:text,done:false});
         this.setState(prevState => ({
             tasks: task,
             input: '',
-            noOfTodos: prevState.noOfTodos + 1
+            noOfTodos: prevState.noOfTodos + 1,
+            taskId:prevState.taskId+1
         }));
     };
 
@@ -31,14 +34,22 @@ class Todos extends Component {
         }));
     };
 
-    editTask = (newText, i) => {
-        this.setState({editing: true});
+    editTask = (index) => {
+        this.setState({
+            editing: true,
+            editingIndex:index});
+    };
+
+    editFalse = () => {
+        this.setState({editing: false});
     };
 
     saveTask = (newText, i) => {
         let task = [...this.state.tasks];
+        // if(task.id===i){
+        //     task.task=newText;
+        // }
         task[i].task = newText;
-        this.toggleDone(i);
         this.setState({tasks: task, editing: false});
     };
 
@@ -52,6 +63,12 @@ class Todos extends Component {
         this.setState({tasks: task});
     };
 
+    toggleEdited = (i) => {
+        let edit = [...this.state.edited];
+        edit.edited=!edit.edited;
+        this.setState({edited: edit});
+    };
+
     render() {
         return (
             <Aux>
@@ -62,11 +79,15 @@ class Todos extends Component {
                     tasks={this.state.tasks}
                     editing={this.state.editing}
                     input={this.state.input}
+                    edited={this.state.edited}
+                    editingIndex={this.state.editingIndex}
                     delete={this.deleteTask}
                     edit={this.editTask}
                     save={this.saveTask}
                     done={this.toggleDone}
-                    handleInput={this.handleInput}/>
+                    handleInput={this.handleInput}
+                    handleEdited={this.toggleEdited}
+                    editFalse={this.editFalse}/>
             </Aux>
         );
     }
